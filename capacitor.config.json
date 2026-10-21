@@ -1,0 +1,6 @@
+{
+  "appId": "com.kaseb.quran",
+  "appName": "Ahmed Kaseb Quran",
+  "webDir": "www",
+  "plugins": { "MediaSession": { "foregroundService": "always" } }
+}
