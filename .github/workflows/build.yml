@@ -1,1 +1,41 @@
-
+name: Build APK
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Prepare web files
+        run: |
+          mkdir -p www/audio
+          cp index.html www/index.html
+          cp [0-9]*.mp3 www/audio/ 2>/dev/null || echo "no bundled audio"
+      - name: Install packages
+        run: npm install
+      - name: Install lock-screen plugin (optional)
+        run: npm install @capgo/capacitor-media-session@^7 || echo "media session plugin not installed"
+      - name: Create Android project
+        run: npx cap add android
+      - name: Add permissions
+        run: python3 patch_manifest.py
+      - name: Sync web files
+        run: npx cap sync android
+      - name: Build APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Kaseb-Quran-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
