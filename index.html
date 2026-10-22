@@ -175,14 +175,14 @@ input[type=range]::-webkit-slider-thumb { width: 22px; height: 22px; margin-top:
 .tb:active { background: rgba(246,239,224,.16); }
 .ttl { flex: 1; min-width: 0; text-align: center; font-family: var(--display); font-weight: 700; font-size: clamp(20px, 5.6vw, 27px); line-height: 1.5; padding-inline: 6px; text-shadow: 0 1px 14px rgba(0,0,0,.75); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .stage { gap: 10px; }
-.disc { position: relative; width: min(56vw, 240px); aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; margin-bottom: 4px; }
+.disc { position: relative; width: min(46vw, 200px); aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; margin-bottom: 4px; }
 .disc .ring { position: absolute; inset: -7px; border-radius: 50%; background: conic-gradient(from 0deg, rgba(227,184,102,.95), rgba(227,184,102,.08) 30%, rgba(227,184,102,.7) 55%, rgba(227,184,102,.06) 80%, rgba(227,184,102,.95)); -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px)); mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px)); }
 .disc.playing .ring { animation: spin 12s linear infinite; }
 .disc .face { position: absolute; inset: 0; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
-  background: radial-gradient(circle at 32% 26%, rgba(255,236,190,.20), rgba(255,236,190,0) 46%), radial-gradient(circle at 50% 50%, #14305a 0%, #0b1a36 72%, #08122a 100%);
+  background: radial-gradient(circle at 32% 26%, rgba(255,236,190,.20), rgba(255,236,190,0) 46%), radial-gradient(circle at 50% 50%, rgba(20,48,90,.84) 0%, rgba(11,26,54,.84) 72%, rgba(8,18,42,.88) 100%); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
   box-shadow: 0 10px 40px rgba(0,0,0,.5), inset 0 0 0 5px rgba(7,14,30,.55), inset 0 0 0 6px rgba(227,184,102,.45); }
 .disc .ds { font-family: var(--display); font-size: clamp(15px, 4.4vw, 20px); color: var(--gold); }
-.disc .dn { font-family: var(--display); font-weight: 700; font-size: clamp(34px, 10.5vw, 54px); line-height: 1.25; color: #fff6dc; text-shadow: 0 2px 16px rgba(227,184,102,.45); }
+.disc .dn { font-family: var(--display); font-weight: 700; font-size: clamp(30px, 9vw, 46px); line-height: 1.25; color: #fff6dc; text-shadow: 0 2px 16px rgba(227,184,102,.45); }
 .name { font-size: clamp(40px, 13vw, 76px); }
 .name.long { font-size: clamp(26px, 8vw, 40px); }
 .sub { font-size: 18px; font-family: var(--display); }
@@ -558,7 +558,7 @@ html[lang=ar] .chip, html[lang=ar] .pill, html[lang=ar] .search, html[lang=ar] .
     };
   }
 
-  var SCENES = [nightLake, seaSunrise, mistForest, rainHills, desertDunes, snowAurora];
+  var PROC = [nightLake, seaSunrise, mistForest, rainHills, desertDunes, snowAurora], SCENES = PROC.slice();
   var slots = [{ cv: $("la") }, { cv: $("lb") }], act = 0, sc = 0, fadeEnd = 0, rafId = 0, last = 0, tt = 0, sceneTimer = 0, rsz = 0;
   var reduce = !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
   function frame(dt) {
@@ -583,6 +583,7 @@ html[lang=ar] .chip, html[lang=ar] .pill, html[lang=ar] .search, html[lang=ar] .
   }
   function showScene(n) {
     sc = (n + SCENES.length) % SCENES.length;
+    if (videos) videos.forEach(function (v) { try { v.pause(); } catch (e) {} });
     var ni = 1 - act;
     slots[ni].draw = SCENES[sc](); slots[ni].cv.classList.add("on"); slots[act].cv.classList.remove("on");
     act = ni; fadeEnd = performance.now() + 3300;
@@ -593,6 +594,168 @@ html[lang=ar] .chip, html[lang=ar] .pill, html[lang=ar] .search, html[lang=ar] .
   window.addEventListener("resize", function () { clearTimeout(rsz); rsz = setTimeout(setup, 250); });
   document.addEventListener("visibilitychange", function () { if (document.hidden) stopLoop(); else startLoop(); });
   setup(); startLoop(); restartTimer();
+
+  /* ---------- real photo + video wallpapers with live effects ---------- */
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  function mkPetals(n, rnd, col) {
+    var o = [], k = Math.max(0.8, W / 420);
+    for (var i = 0; i < n; i++) o.push({ x: rnd() * W, y: rnd() * H, v: (22 + rnd() * 30) * k, ph: rnd() * 6.3, sw: 10 + rnd() * 22, s: (2.4 + rnd() * 3) * k, rot: rnd() * 6.3, rv: (rnd() - 0.5) * 3, a: 0.55 + rnd() * 0.4 });
+    o.col = col; return o;
+  }
+  function drawPetals(g, arr, t, dt) {
+    g.fillStyle = arr.col;
+    arr.forEach(function (p) {
+      p.y += p.v * dt; p.rot += p.rv * dt;
+      if (p.y > H + 10) { p.y = -10; p.x = Math.random() * W; }
+      g.globalAlpha = p.a; g.save(); g.translate(p.x + Math.sin(t * 1.1 + p.ph) * p.sw, p.y); g.rotate(p.rot);
+      g.beginPath(); g.ellipse(0, 0, p.s * 1.7, p.s, 0, 0, 6.2832); g.fill(); g.restore();
+    });
+    g.globalAlpha = 1;
+  }
+  function drawBird(g, x, y, s, flap, col) {
+    g.strokeStyle = col; g.lineWidth = Math.max(1.3, s * 0.17); g.lineCap = "round"; g.lineJoin = "round";
+    var tip = y - flap * s * 0.75, ctl = y - s * 0.32 - flap * s * 0.5;
+    g.beginPath(); g.moveTo(x - s, tip); g.quadraticCurveTo(x - s * 0.5, ctl, x, y); g.quadraticCurveTo(x + s * 0.5, ctl, x + s, tip); g.stroke();
+  }
+  function spawnFlock(rnd) {
+    var dir = rnd() < 0.5 ? 1 : -1, k = Math.max(0.85, W / 420);
+    return { dir: dir, n: 3 + Math.floor(rnd() * 4), y: H * (0.1 + rnd() * 0.3), sz: (6 + rnd() * 7) * k, sp: dir * (40 + rnd() * 40) * k, x: dir > 0 ? -90 : W + 90, ph: rnd() * 6.3, bob: rnd() * 6.3 };
+  }
+  function stepFlocks(g, flocks, t, dt, col) {
+    g.globalAlpha = 0.92;
+    for (var i = flocks.length - 1; i >= 0; i--) {
+      var f = flocks[i]; f.x += f.sp * dt;
+      if ((f.dir > 0 && f.x > W + 130) || (f.dir < 0 && f.x < -130)) { flocks.splice(i, 1); continue; }
+      var y0 = f.y + Math.sin(t * 0.6 + f.bob) * 6;
+      for (var j = 0; j < f.n; j++) {
+        var row = Math.ceil(j / 2), side = j % 2 ? 1 : -1;
+        drawBird(g, f.x - f.dir * row * f.sz * 2.3, y0 + (j ? side * row * f.sz : 0) + Math.sin(t * 1.3 + j) * 2, f.sz * (1 - row * 0.05), Math.sin(t * 6.5 + f.ph + j * 0.8), col);
+      }
+    }
+    g.globalAlpha = 1;
+  }
+  function drawRays(g, t) {
+    g.save(); g.globalCompositeOperation = "lighter";
+    for (var i = 0; i < 4; i++) {
+      var a = 0.05 + 0.04 * Math.sin(t * 0.35 + i * 1.7), x0 = W * (0.02 + i * 0.22) + Math.sin(t * 0.12 + i) * 18, w = W * 0.12, x1 = x0 + W * 0.35;
+      var gr = g.createLinearGradient(x0, 0, x1, H * 0.75);
+      gr.addColorStop(0, "rgba(255,246,214," + a + ")"); gr.addColorStop(1, "rgba(255,246,214,0)");
+      g.fillStyle = gr; g.beginPath(); g.moveTo(x0, 0); g.lineTo(x0 + w, 0); g.lineTo(x1 + w * 2.4, H * 0.75); g.lineTo(x1, H * 0.75); g.closePath(); g.fill();
+    }
+    g.restore();
+  }
+  function photoScene(P, rainy) {
+    var img = P.img, iw = img.naturalWidth, ih = img.naturalHeight, r = R(Math.floor(Math.random() * 9000) + 7), fx = {};
+    (P.fx || []).forEach(function (k) { fx[k] = 1; });
+    var rainA = rainy ? mkRain(Math.round(clamp(W * 0.75, 120, 300)), r) : null, rainB = rainy ? mkRain(Math.round(clamp(W * 0.4, 60, 160)), r) : null;
+    var rings = [], ringAcc = 0, flocks = [], nextFlock = 1.5 + r() * 3;
+    var petals = fx.petals ? mkPetals(Math.round(clamp(W / 14, 16, 34)), r, P.petal || "#ff9ec0") : null;
+    var fogs = (fx.mist || rainy) ? mkFlow(4, function () { return fogSprite("232,244,250", rainy ? 0.55 : 0.4); }, H * 0.5, H * 0.9, 6, 12, 1.0, 1.7, 0.45, 0.85, r) : null;
+    var shades = fx.shade ? mkFlow(3, function () { return fogSprite("8,22,36", 0.34); }, H * 0.42, H * 0.82, 9, 15, 2.2, 3.2, 0.5, 0.8, r) : null;
+    var spray = P.fall ? fogSprite("255,255,255", 0.55) : null;
+    var sparks = []; if (P.water) for (var i = 0; i < 48; i++) sparks.push({ u: r(), v: r(), ph: r() * 6.3, sp: 0.7 + r() * 1.8, w: 2 + r() * 4 });
+    var drops = []; if (P.fall) for (var j = 0; j < 70; j++) drops.push({ u: r(), ph: r(), sp: 0.7 + r() * 0.9, len: 7 + r() * 11 });
+    return function (g, t, dt) {
+      var base = Math.max(W / iw, H / ih) * 1.14, k = 1 + 0.05 * (0.5 - 0.5 * Math.cos(t * 0.06));
+      var dw = iw * base * k, dh = ih * base * k;
+      var dx = clamp(W / 2 - (P.focus == null ? 0.5 : P.focus) * dw + Math.sin(t * 0.045) * W * 0.02, W - dw + 12, -12);
+      var dy = clamp((H - dh) / 2 + Math.cos(t * 0.037) * H * 0.01, H - dh + 4, -4);
+      g.drawImage(img, dx, dy, dw, dh);
+      var wz = P.water, ys, ye, xs, xw;
+      if (wz) {
+        xs = dx + wz[0] * dw; xw = (wz[1] - wz[0]) * dw; ys = dy + wz[2] * dh; ye = dy + wz[3] * dh;
+        var step = 3, sx0 = wz[0] * iw, sw = (wz[1] - wz[0]) * iw, sh = step / dh * ih + 0.4;
+        for (var y = ys; y < ye; y += step) {
+          var f = (y - ys) / (ye - ys), amp = 0.7 + 3.0 * f, o = Math.sin(y * 0.05 + t * 1.5) * amp + Math.sin(y * 0.13 - t * 2.2) * amp * 0.45;
+          g.drawImage(img, sx0, (y - dy) / dh * ih, sw, sh, xs + o, y, xw, step + 0.6);
+        }
+        g.fillStyle = "#fff";
+        for (var q = 0; q < sparks.length; q++) {
+          var sp = sparks[q], a = Math.sin(t * sp.sp + sp.ph); if (a < 0.55) continue;
+          g.globalAlpha = (a - 0.55) * 1.6 * (rainy ? 0.5 : 0.85);
+          g.fillRect(xs + sp.u * xw + Math.sin(t * 0.4 + sp.ph) * 4, ys + (sp.v * sp.v) * (ye - ys), sp.w * (0.6 + sp.v), 1.3);
+        }
+        g.globalAlpha = 1;
+      }
+      if (P.fall) {
+        var fr = P.fall, rx = dx + fr[0] * dw, rw = (fr[1] - fr[0]) * dw, ry = dy + fr[2] * dh, rh = (fr[3] - fr[2]) * dh;
+        g.fillStyle = "#fff";
+        for (var d = 0; d < drops.length; d++) { var dd = drops[d]; g.globalAlpha = 0.2 + 0.35 * dd.sp / 1.6; g.fillRect(rx + dd.u * rw, ry + ((dd.ph + t * dd.sp * 0.55) % 1) * rh, 1.4, dd.len); }
+        g.globalAlpha = 0.45 + 0.2 * Math.sin(t * 2.1); g.drawImage(spray, rx - rw * 0.7, ry + rh - rw * 0.25, rw * 2.4, rw * 0.9); g.globalAlpha = 1;
+      }
+      if (shades) drawFlow(g, shades, dt);
+      if (fx.rays && !rainy) drawRays(g, t);
+      if (fogs) drawFlow(g, fogs, dt);
+      if (petals && !rainy) drawPetals(g, petals, t, dt);
+      if (fx.birds && !rainy) {
+        nextFlock -= dt; if (nextFlock <= 0 && flocks.length < 2) { flocks.push(spawnFlock(r)); nextFlock = 8 + r() * 9; }
+        stepFlocks(g, flocks, t, dt, P.birds || "#f4f7ff");
+      }
+      if (rainy) {
+        g.fillStyle = "rgba(22,34,46,.30)"; g.fillRect(0, 0, W, H);
+        g.fillStyle = lin(g, [[0, "rgba(190,208,220,.30)"], [0.6, "rgba(190,208,220,0)"]], 0, H); g.fillRect(0, 0, W, H);
+        if (wz) {
+          ringAcc += dt * 11;
+          while (ringAcc > 1) { ringAcc -= 1; rings.push({ x: xs + r() * xw, y: ys + (0.1 + r() * 0.9) * (ye - ys), age: 0 }); }
+          g.lineWidth = 1;
+          for (var m = rings.length - 1; m >= 0; m--) {
+            var rg = rings[m]; rg.age += dt; if (rg.age > 1.3) { rings.splice(m, 1); continue; }
+            g.strokeStyle = "rgba(255,255,255," + (0.5 * (1 - rg.age / 1.3)) + ")"; g.beginPath(); g.ellipse(rg.x, rg.y, rg.age * 26, rg.age * 8, 0, 0, 6.2832); g.stroke();
+          }
+        }
+        drawRain(g, rainB, dt, "rgba(225,238,246,.22)"); drawRain(g, rainA, dt, "rgba(225,238,246,.42)");
+      }
+    };
+  }
+  function videoScene(v) {
+    try { var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); } catch (e) {}
+    return function (g) {
+      if (v.paused) { try { v.play().catch(function () {}); } catch (e) {} }
+      var vw = v.videoWidth, vh = v.videoHeight; if (!vw || v.readyState < 2) { g.fillStyle = "#08111f"; g.fillRect(0, 0, W, H); return; }
+      var s = Math.max(W / vw, H / vh); g.drawImage(v, (W - vw * s) / 2, (H - vh * s) / 2, vw * s, vh * s);
+    };
+  }
+  var BUILTIN = {
+    "wp1.jpg": { focus: 0.45, water: [0.0, 0.74, 0.37, 0.70], fall: [0.03, 0.14, 0.07, 0.30], fx: ["rays", "birds", "mist"], birds: "#f6f9ff" },
+    "wp2.jpg": { focus: 0.4, water: [0.12, 0.68, 0.58, 0.80], fx: ["petals", "birds", "rays"], birds: "#ffffff", petal: "#ff86b4" },
+    "wp3.jpg": { focus: 0.5, water: [0.08, 0.95, 0.58, 0.72], fx: ["shade", "birds", "mist"], birds: "#1c2630" }
+  };
+  var photos = [], videos = [], usingMedia = false;
+  function buildMediaScenes() {
+    var out = [], rn = [], ri = 0;
+    photos.forEach(function (P) { rn.push(function () { return photoScene(P, true); }); });
+    photos.forEach(function (P, i) { out.push(function () { return photoScene(P, false); }); if (i % 2 === 1 && ri < rn.length) out.push(rn[ri++]); });
+    if (ri < rn.length) out.push(rn[ri++]);
+    videos.forEach(function (v) { out.push(function () { return videoScene(v); }); });
+    return out;
+  }
+  function mediaReady() {
+    SCENES = buildMediaScenes();
+    if (!usingMedia) { usingMedia = true; showScene(0); restartTimer(); }
+  }
+  function loadImg(name) {
+    var im = new Image(), tries = ["wallpapers/" + name, name], i = 0;
+    im.onload = function () {
+      var P = { img: im, name: name, fx: ["rays", "birds", "mist"], birds: "#f4f7ff" }, b = BUILTIN[name], k;
+      if (b) for (k in b) P[k] = b[k];
+      photos.push(P); photos.sort(function (a, c) { return parseInt(a.name.replace(/\D/g, ""), 10) - parseInt(c.name.replace(/\D/g, ""), 10); });
+      mediaReady();
+    };
+    im.onerror = function () { i++; if (i < tries.length) im.src = tries[i]; };
+    im.src = tries[0];
+  }
+  function loadVideo(name) {
+    var v = document.createElement("video"), tries = ["wallpapers/" + name, name], i = 0;
+    v.muted = true; v.loop = true; v.playsInline = true; v.setAttribute("playsinline", ""); v.preload = "auto";
+    v.onloadeddata = function () { videos.push(v); mediaReady(); };
+    v.onerror = function () { i++; if (i < tries.length) { v.src = tries[i]; } };
+    v.src = tries[0];
+  }
+  if (/^(https?:|file:)$/.test(location.protocol)) {
+    for (var wi = 1; wi <= 12; wi++) loadImg("wp" + wi + ".jpg");
+    for (var vi = 1; vi <= 6; vi++) loadVideo("v" + vi + ".mp4");
+  }
+
 
   /* ---------- player ---------- */
   var CLIP_ID = "ahmed-kaseb-tlawat";

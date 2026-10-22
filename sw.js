@@ -1,4 +1,4 @@
-const V = "kaseb-v2", SHELL = V + "-shell", AUDIO = "kaseb-audio";
+const V = "kaseb-v3", SHELL = V + "-shell", AUDIO = "kaseb-audio";
 const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", (e) => {
@@ -48,6 +48,17 @@ self.addEventListener("fetch", (e) => {
     return;
   }
   if (url.origin !== location.origin) return;
+  if (url.origin === location.origin && /(\/wallpapers\/|\/wp\d+\.jpg$)/.test(url.pathname)) {
+    // Wallpaper photos: keep a copy after the first load so they work offline.
+    e.respondWith(caches.open(SHELL).then(async (c) => {
+      const hit = await c.match(req);
+      if (hit) return hit;
+      const r = await fetch(req);
+      if (r.ok) c.put(req, r.clone());
+      return r;
+    }));
+    return;
+  }
   const page = req.mode === "navigate" || url.pathname.endsWith("/index.html") || url.pathname.endsWith("/");
   if (page) {
     // Pages: try the network first so updates show up, fall back to the saved copy when offline.
