@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -161,68 +161,107 @@ input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(t
 .sub { letter-spacing: .02em; }
 .brand { font-family: var(--body); font-size: 17px; font-weight: 700; letter-spacing: .02em; }
 .empty.note { text-align: left; }
+
+/* ---- v2 layout: big, simple, Arabic-first player ---- */
+.seek, .main, .opts { direction: ltr; }
+input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(to right, var(--gold) var(--p, 0%), rgba(246,239,224,.28) var(--p, 0%)); height: 6px; }
+input[type=range]::-webkit-slider-thumb { width: 22px; height: 22px; margin-top: -8px; }
+.bar { display: flex; align-items: center; gap: 4px; padding-block: 10px 4px; direction: ltr; }
+.tb { width: 48px; height: 48px; flex: none; border-radius: 50%; display: grid; place-items: center; color: var(--ink); background: rgba(7,14,30,.38); border: 1px solid var(--line); }
+.tb svg { width: 25px; height: 25px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.tb.on { color: var(--gold); border-color: rgba(227,184,102,.6); }
+.tb.on svg { fill: currentColor; }
+#topDl.on svg { fill: none; }
+.tb:active { background: rgba(246,239,224,.16); }
+.ttl { flex: 1; min-width: 0; text-align: center; font-family: var(--display); font-weight: 700; font-size: clamp(20px, 5.6vw, 27px); line-height: 1.5; padding-inline: 6px; text-shadow: 0 1px 14px rgba(0,0,0,.75); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.stage { gap: 10px; }
+.disc { position: relative; width: min(56vw, 240px); aspect-ratio: 1; border-radius: 50%; display: grid; place-items: center; margin-bottom: 4px; }
+.disc .ring { position: absolute; inset: -7px; border-radius: 50%; background: conic-gradient(from 0deg, rgba(227,184,102,.95), rgba(227,184,102,.08) 30%, rgba(227,184,102,.7) 55%, rgba(227,184,102,.06) 80%, rgba(227,184,102,.95)); -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px)); mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3px)); }
+.disc.playing .ring { animation: spin 12s linear infinite; }
+.disc .face { position: absolute; inset: 0; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+  background: radial-gradient(circle at 32% 26%, rgba(255,236,190,.20), rgba(255,236,190,0) 46%), radial-gradient(circle at 50% 50%, #14305a 0%, #0b1a36 72%, #08122a 100%);
+  box-shadow: 0 10px 40px rgba(0,0,0,.5), inset 0 0 0 5px rgba(7,14,30,.55), inset 0 0 0 6px rgba(227,184,102,.45); }
+.disc .ds { font-family: var(--display); font-size: clamp(15px, 4.4vw, 20px); color: var(--gold); }
+.disc .dn { font-family: var(--display); font-weight: 700; font-size: clamp(34px, 10.5vw, 54px); line-height: 1.25; color: #fff6dc; text-shadow: 0 2px 16px rgba(227,184,102,.45); }
+.name { font-size: clamp(40px, 13vw, 76px); }
+.name.long { font-size: clamp(26px, 8vw, 40px); }
+.sub { font-size: 18px; font-family: var(--display); }
+.mushaf-no { font-size: 15px; }
+.deck { gap: 12px; padding-top: 14px; }
+.opts { display: flex; justify-content: center; gap: 14px; }
+.opt { width: 56px; height: 46px; border-radius: 14px; display: grid; place-items: center; color: var(--ink-dim); background: rgba(246,239,224,.07); border: 1px solid var(--line); text-decoration: none; }
+.opt svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.opt.act, .opt[aria-pressed=true] { color: var(--gold); border-color: rgba(227,184,102,.65); background: rgba(227,184,102,.12); }
+.opt:active { background: rgba(246,239,224,.16); }
+.time { font-size: 15px; color: var(--ink); min-width: 48px; }
+.main { gap: 34px; }
+.main .ic { width: 62px; height: 62px; background: rgba(246,239,224,.08); border: 1px solid var(--line); }
+.main .ic svg { width: 28px; height: 28px; }
+.play { width: 88px; height: 88px; }
+.play svg { width: 40px; height: 40px; }
+.toast { position: fixed; z-index: 40; left: 50%; bottom: calc(150px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); max-width: min(88vw, 420px); padding: 11px 18px; border-radius: 14px; background: rgba(12,20,40,.94); border: 1px solid rgba(227,184,102,.5); color: var(--ink); font-size: 15px; line-height: 1.5; text-align: center; }
+.sheet-head .grp { display: flex; gap: 8px; }
+html[lang=ar] .chip, html[lang=ar] .pill, html[lang=ar] .search, html[lang=ar] .dlmsg, html[lang=ar] .empty { font-family: var(--display); font-size: 18px; }
+@media (max-height: 640px) { .disc { width: min(40vw, 170px); } .name { font-size: clamp(34px, 11vw, 56px); } }
 </style>
 
 <div class="bg" aria-hidden="true"><canvas class="layer" id="la"></canvas><canvas class="layer" id="lb"></canvas><div class="scrim"></div></div>
 
-<main class="app" id="app" dir="ltr" lang="en">
-  <header class="top">
-    <div class="brand">Ahmed Kaseb</div>
-    <button class="pill" id="openList" type="button" aria-label="Open library">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
-      Library
-    </button>
+<main class="app" id="app" dir="ltr">
+  <header class="bar">
+    <button class="tb" id="fav" type="button" aria-pressed="false" data-i18n-aria="save"><svg viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-9.2-9.4C1.7 7.8 3.6 4.8 6.8 4.8c2 0 3.5 1.1 5.2 3.2 1.7-2.1 3.2-3.2 5.2-3.2 3.2 0 5.1 3 4 6.3-1.7 4.8-9.2 9.4-9.2 9.4z"/></svg></button>
+    <div class="ttl" id="ttl" dir="auto"></div>
+    <button class="tb" id="topDl" type="button" data-i18n-aria="dlThis"><svg viewBox="0 0 24 24"><path d="M12 4v11m0 0l-4-4m4 4l4-4M5 20h14"/></svg></button>
+    <button class="tb" id="openList" type="button" data-i18n-aria="library"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
   </header>
 
   <section class="stage" aria-live="polite">
-    <div class="eyebrow">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1l2.6 4.4L19.5 4.5l-.9 5L23 12l-4.4 2.6.9 5-4.9-.9L12 23l-2.6-4.3-4.9.9.9-5L1 12l4.4-2.5-.9-5 4.9.9z"/></svg>
-      <span id="kind">Surah</span>
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 1l2.6 4.4L19.5 4.5l-.9 5L23 12l-4.4 2.6.9 5-4.9-.9L12 23l-2.6-4.3-4.9.9.9-5L1 12l4.4-2.5-.9-5 4.9.9z"/></svg>
-    </div>
+    <span id="kind" hidden></span>
+    <div class="disc" id="disc" aria-hidden="true"><div class="ring"></div><div class="face"><span class="ds" dir="rtl" lang="ar">القارئ الشيخ</span><span class="dn" dir="rtl" lang="ar">أحمد كاسب</span></div></div>
     <h1 class="name" id="name" dir="rtl" lang="ar">الفاتحة</h1>
-    <div class="sub" id="sub">Recited by Sheikh Ahmed Kaseb</div>
+    <div class="sub" id="sub"></div>
     <div class="mushaf-no" id="no"></div>
     <div class="msg" id="msg" hidden></div>
   </section>
 
-  <section class="deck" aria-label="Playback controls">
+  <section class="deck" data-i18n-aria="controls">
+    <div class="opts">
+      <button class="opt" id="mode" type="button" aria-pressed="false" data-i18n-aria="repeat"><svg viewBox="0 0 24 24"><path d="M17 2l4 4-4 4M3 11V9a3 3 0 013-3h15M7 22l-4-4 4-4M21 13v2a3 3 0 01-3 3H3"/></svg></button>
+      <button class="opt" id="shuf" type="button" aria-pressed="false" data-i18n-aria="shuffle"><svg viewBox="0 0 24 24"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg></button>
+      <button class="opt" id="scene" type="button" data-i18n-aria="bg"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg></button>
+      <a class="opt" id="src" href="#" target="_blank" rel="noopener" data-i18n-aria="link"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 005.7 0l3-3a4 4 0 00-5.7-5.7l-1 1M14 10a4 4 0 00-5.7 0l-3 3a4 4 0 005.7 5.7l1-1"/></svg></a>
+    </div>
     <div class="seek">
       <span class="time" id="cur">0:00</span>
-      <input type="range" id="seek" min="0" max="1000" value="0" step="1" aria-label="Seek">
+      <input type="range" id="seek" min="0" max="1000" value="0" step="1" data-i18n-aria="seek">
       <span class="time" id="dur">0:00</span>
     </div>
     <div class="main">
-      <button class="ic" id="prev" type="button" aria-label="Previous"><svg viewBox="0 0 24 24"><path d="M5 5h2.4v14H5zM20 5v14L8.5 12z"/></svg></button>
-      <button class="play" id="play" type="button" aria-label="Play"><svg viewBox="0 0 24 24" id="playIcon"><path d="M7 4.5v15l13-7.5z"/></svg></button>
-      <button class="ic" id="next" type="button" aria-label="Next"><svg viewBox="0 0 24 24"><path d="M16.6 5H19v14h-2.4zM4 5v14l11.5-7z"/></svg></button>
-    </div>
-    <div class="extras">
-      <button class="chip act" id="mode" type="button">Play in order</button>
-      <button class="chip" id="fav" type="button" aria-pressed="false">♡ Save</button>
-      <a class="chip" id="src" href="#" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;text-decoration:none">File link</a>
-      <button class="chip" id="scene" type="button">Change scene</button>
+      <button class="ic" id="prev" type="button" data-i18n-aria="prev"><svg viewBox="0 0 24 24"><path d="M5 5h2.4v14H5zM20 5v14L8.5 12z"/></svg></button>
+      <button class="play" id="play" type="button" data-i18n-aria="play"><svg viewBox="0 0 24 24" id="playIcon"><path d="M7 4.5v15l13-7.5z"/></svg></button>
+      <button class="ic" id="next" type="button" data-i18n-aria="next"><svg viewBox="0 0 24 24"><path d="M16.6 5H19v14h-2.4zM4 5v14l11.5-7z"/></svg></button>
     </div>
   </section>
 </main>
+<div class="toast" id="toast" role="status" hidden></div>
 
-<div class="sheet" id="sheet" dir="ltr" lang="en" hidden>
+<div class="sheet" id="sheet" dir="ltr" hidden>
   <div class="sheet-in">
     <div class="sheet-head">
-      <h2>Library</h2>
-      <button class="pill" id="closeList" type="button">Close</button>
+      <h2 data-i18n="library">Library</h2>
+      <div class="grp"><button class="pill" id="langBtn" type="button">EN</button><button class="pill" id="closeList" type="button" data-i18n="close">Close</button></div>
     </div>
     <div class="tabs">
-      <button class="chip act" id="tabM" type="button">Mushaf · 114</button>
-      <button class="chip" id="tabC" type="button">Recitations</button>
+      <button class="chip act" id="tabM" type="button" dir="auto" data-i18n="mushaf">Mushaf · 114</button>
+      <button class="chip" id="tabC" type="button" dir="auto">Recitations</button>
     </div>
     <div class="tabs">
-      <button class="chip act" id="tabAll" type="button">All</button>
-      <button class="chip" id="tabFav" type="button">Saved</button>
-      <button class="chip" id="tabOff" type="button">Offline</button>
+      <button class="chip act" id="tabAll" type="button" data-i18n="all">All</button>
+      <button class="chip" id="tabFav" type="button" data-i18n="saved">Saved</button>
+      <button class="chip" id="tabOff" type="button" data-i18n="offline">Offline</button>
     </div>
     <div class="dlmsg" id="dlmsg" hidden></div>
-    <input class="search" id="q" type="search" placeholder="Search by name or number" autocomplete="off" aria-label="Search">
+    <input class="search" id="q" type="search" data-i18n-ph="search" placeholder="Search" autocomplete="off" data-i18n-aria="searchA">
     <ul class="list" id="list"></ul>
   </div>
 </div>
@@ -232,10 +271,58 @@ input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(t
   var NAMES = ["الفاتحة","البقرة","آل عمران","النساء","المائدة","الأنعام","الأعراف","الأنفال","التوبة","يونس","هود","يوسف","الرعد","إبراهيم","الحجر","النحل","الإسراء","الكهف","مريم","طه","الأنبياء","الحج","المؤمنون","النور","الفرقان","الشعراء","النمل","القصص","العنكبوت","الروم","لقمان","السجدة","الأحزاب","سبأ","فاطر","يس","الصافات","ص","الزمر","غافر","فصلت","الشورى","الزخرف","الدخان","الجاثية","الأحقاف","محمد","الفتح","الحجرات","ق","الذاريات","الطور","النجم","القمر","الرحمن","الواقعة","الحديد","المجادلة","الحشر","الممتحنة","الصف","الجمعة","المنافقون","التغابن","الطلاق","التحريم","الملك","القلم","الحاقة","المعارج","نوح","الجن","المزمل","المدثر","القيامة","الإنسان","المرسلات","النبأ","النازعات","عبس","التكوير","الانفطار","المطففين","الانشقاق","البروج","الطارق","الأعلى","الغاشية","الفجر","البلد","الشمس","الليل","الضحى","الشرح","التين","العلق","القدر","البينة","الزلزلة","العاديات","القارعة","التكاثر","العصر","الهمزة","الفيل","قريش","الماعون","الكوثر","الكافرون","النصر","المسد","الإخلاص","الفلق","الناس"];
   var BASE = "https://archive.org/download/Ahmad-Kaseb/";
   var $ = function (id) { return document.getElementById(id); };
+
+  var LANG = "ar";
+  try { LANG = localStorage.getItem("kaseb:lang") || "ar"; } catch (e) {}
+  var D = {
+    ar: {
+      library: "المكتبة", close: "إغلاق", all: "الكل", saved: "المحفوظ", offline: "بدون إنترنت", mushaf: "المصحف · 114", recs: "التلاوات",
+      search: "ابحث بالاسم أو الرقم", searchA: "بحث", save: "حفظ في المفضلة", dlThis: "تحميل للاستماع بدون إنترنت", controls: "أزرار التشغيل",
+      repeat: "تكرار", shuffle: "عشوائي", bg: "تغيير الخلفية", link: "رابط الملف", seek: "شريط التقدم", prev: "السابق", next: "التالي", play: "تشغيل", pause: "إيقاف مؤقت",
+      by: "بصوت الشيخ أحمد كاسب", artist: "الشيخ أحمد كاسب", kindM: "سورة", kindC: "تلاوة",
+      infoM: function (k, tr) { return "السورة رقم " + k + " من 114"; }, infoC: function (k, n) { return "التلاوة " + k + " من " + n; },
+      ttlM: function (k, name, tr) { return k + " - سورة " + name; },
+      fail: function (u) { return 'تعذّر التشغيل. تأكد من الإنترنت أو <a href="' + u + '" target="_blank" rel="noopener">افتح ملف الصوت مباشرة</a>.'; },
+      dlFail: "فشل التحميل. تأكد من اتصالك بالإنترنت وحاول مرة أخرى.", dlFailWeb: "فشل التحميل. التحميل يعمل في التطبيق المثبّت أو ملف HTML، وليس داخل المعاينة.",
+      confirmRm: "حذف هذا التحميل من جهازك؟", loading: "جاري تحميل القائمة الكاملة…", noRes: "لا توجد نتائج",
+      noOff: "لا يوجد شيء متاح بدون إنترنت. اضغط سهم التحميل بجانب أي عنصر.", noFav: "لا يوجد محفوظات. اضغط القلب أثناء الاستماع.",
+      incl: "مضمّن في التطبيق", dled: "تم التحميل. اضغط للحذف", dlAria: "تحميل للاستماع بدون إنترنت",
+      tIsOff: "هذه التلاوة متاحة بدون إنترنت ✓", tDl: "بدأ التحميل…", tDone: "تم التحميل ✓", tFav: "أُضيفت إلى المفضلة", tUnfav: "أُزيلت من المفضلة",
+      tRepeatOn: "تكرار التلاوة: مفعّل", tRepeatOff: "تكرار التلاوة: متوقف", tShufOn: "التشغيل العشوائي: مفعّل", tShufOff: "التشغيل العشوائي: متوقف", other: "EN"
+    },
+    en: {
+      library: "Library", close: "Close", all: "All", saved: "Saved", offline: "Offline", mushaf: "Mushaf · 114", recs: "Recitations",
+      search: "Search by name or number", searchA: "Search", save: "Save to favorites", dlThis: "Download for offline", controls: "Playback controls",
+      repeat: "Repeat", shuffle: "Shuffle", bg: "Change background", link: "File link", seek: "Seek", prev: "Previous", next: "Next", play: "Play", pause: "Pause",
+      by: "Recited by Sheikh Ahmed Kaseb", artist: "Sheikh Ahmed Kaseb", kindM: "Surah", kindC: "Recitation",
+      infoM: function (k, tr) { return "Surah " + k + " of 114 · " + tr; }, infoC: function (k, n) { return "Recitation " + k + " of " + n; },
+      ttlM: function (k, name, tr) { return k + " - " + tr; },
+      fail: function (u) { return 'Could not play this recitation. Check your internet connection or <a href="' + u + '" target="_blank" rel="noopener">open the audio file directly</a>.'; },
+      dlFail: "Download failed. Check your internet connection and try again.", dlFailWeb: "Download failed. Downloads work in the installed app or the downloaded HTML file, not inside the preview.",
+      confirmRm: "Remove this download from your device?", loading: "Loading the full list from the archive…", noRes: "No results",
+      noOff: "Nothing available offline yet. Tap the download arrow on any item.", noFav: "Nothing saved yet. Tap the heart while listening.",
+      incl: "Included in the app", dled: "Downloaded. Tap to remove", dlAria: "Download for offline",
+      tIsOff: "This is already available offline ✓", tDl: "Download started…", tDone: "Downloaded ✓", tFav: "Added to favorites", tUnfav: "Removed from favorites",
+      tRepeatOn: "Repeat: on", tRepeatOff: "Repeat: off", tShufOn: "Shuffle: on", tShufOff: "Shuffle: off", other: "ع"
+    }
+  };
+  function T(k) { var v = (D[LANG] || D.ar)[k]; if (typeof v === "function") return v.apply(null, Array.prototype.slice.call(arguments, 1)); return v == null ? k : v; }
+  function applyLang() {
+    var h = document.documentElement; h.setAttribute("lang", LANG);
+    var els = document.querySelectorAll("[data-i18n]"), i;
+    for (i = 0; i < els.length; i++) els[i].textContent = T(els[i].getAttribute("data-i18n"));
+    els = document.querySelectorAll("[data-i18n-aria]");
+    for (i = 0; i < els.length; i++) els[i].setAttribute("aria-label", T(els[i].getAttribute("data-i18n-aria")));
+    els = document.querySelectorAll("[data-i18n-ph]");
+    for (i = 0; i < els.length; i++) els[i].setAttribute("placeholder", T(els[i].getAttribute("data-i18n-ph")));
+    var lb = document.getElementById("langBtn"); if (lb) lb.textContent = T("other");
+  }
+  var toastT = 0;
+  function toast(m) { var t = document.getElementById("toast"); if (!t) return; t.textContent = m; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(function () { t.hidden = true; }, 2600); }
   var ar = function (n) { return Number(n).toLocaleString("en-US", { useGrouping: false }); };
   function fileOf(n) { return n === 99 ? "99.mp3" : ("00" + n).slice(-3) + ".mp3"; }
   function urlOf(n) { return BASE + fileOf(n); }
-  function fmt(s) { if (!isFinite(s)) s = 0; s = Math.floor(s); var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return (h ? ar(h) + ":" + ar(("0" + m).slice(-2)) : ar(m)) + ":" + ar(("0" + x).slice(-2)); }
+  function fmt(s) { if (!isFinite(s)) s = 0; s = Math.floor(s); var h = Math.floor(s / 3600), m = Math.floor((s % 3600) / 60), x = s % 60; return (h ? ar(h) + ":" + ("0" + m).slice(-2) : ar(m)) + ":" + ("0" + x).slice(-2); }
   var TR = ["Al-Fatihah", "Al-Baqarah", "Al-Imran", "An-Nisa", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal", "At-Tawbah", "Yunus", "Hud", "Yusuf", "Ar-Ra'd", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra", "Al-Kahf", "Maryam", "Ta-Ha", "Al-Anbiya", "Al-Hajj", "Al-Mu'minun", "An-Nur", "Al-Furqan", "Ash-Shu'ara", "An-Naml", "Al-Qasas", "Al-Ankabut", "Ar-Rum", "Luqman", "As-Sajdah", "Al-Ahzab", "Saba", "Fatir", "Ya-Sin", "As-Saffat", "Sad", "Az-Zumar", "Ghafir", "Fussilat", "Ash-Shura", "Az-Zukhruf", "Ad-Dukhan", "Al-Jathiyah", "Al-Ahqaf", "Muhammad", "Al-Fath", "Al-Hujurat", "Qaf", "Adh-Dhariyat", "At-Tur", "An-Najm", "Al-Qamar", "Ar-Rahman", "Al-Waqi'ah", "Al-Hadid", "Al-Mujadila", "Al-Hashr", "Al-Mumtahanah", "As-Saff", "Al-Jumu'ah", "Al-Munafiqun", "At-Taghabun", "At-Talaq", "At-Tahrim", "Al-Mulk", "Al-Qalam", "Al-Haqqah", "Al-Ma'arij", "Nuh", "Al-Jinn", "Al-Muzzammil", "Al-Muddaththir", "Al-Qiyamah", "Al-Insan", "Al-Mursalat", "An-Naba", "An-Nazi'at", "Abasa", "At-Takwir", "Al-Infitar", "Al-Mutaffifin", "Al-Inshiqaq", "Al-Buruj", "At-Tariq", "Al-A'la", "Al-Ghashiyah", "Al-Fajr", "Al-Balad", "Ash-Shams", "Al-Layl", "Ad-Duha", "Ash-Sharh", "At-Tin", "Al-Alaq", "Al-Qadr", "Al-Bayyinah", "Az-Zalzalah", "Al-Adiyat", "Al-Qari'ah", "At-Takathur", "Al-Asr", "Al-Humazah", "Al-Fil", "Quraysh", "Al-Ma'un", "Al-Kawthar", "Al-Kafirun", "An-Nasr", "Al-Masad", "Al-Ikhlas", "Al-Falaq", "An-Nas"];
   function lat(t) { return String(t || "").toLowerCase().replace(/[-'’\s]/g, ""); }
   function norm(t) { return t.toLowerCase().replace(/[ً-ْ]/g, "").replace(/[إأآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي"); }
@@ -599,9 +686,9 @@ input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(t
     })(n);
   }
   function track(c, k) {
-    if (c === "m") return { col: "m", key: k, title: NAMES[k - 1], url: urlOf(k), kind: "Surah", tr: TR[k - 1], sub: "Recited by Sheikh Ahmed Kaseb", info: "Surah " + ar(k) + " of 114 · " + TR[k - 1] };
+    if (c === "m") return { col: "m", key: k, title: NAMES[k - 1], url: urlOf(k), kind: T("kindM"), tr: TR[k - 1], sub: T("by"), info: T("infoM", ar(k), TR[k - 1]), ttl: T("ttlM", ar(k), NAMES[k - 1], TR[k - 1]) };
     var t = findClip(k); if (!t) return null;
-    return { col: "c", key: k, title: t.title, url: t.url, kind: "Recitation", tr: "", sub: "Sheikh Ahmed Kaseb", info: "Recitation " + ar(k) + " of " + ar(clips.length) };
+    return { col: "c", key: k, title: t.title, url: t.url, kind: T("kindC"), tr: "", sub: T("artist"), info: T("infoC", ar(k), ar(clips.length)), ttl: t.title };
   }
   function all(c) { var o = [], i; if (c === "m") { for (i = 1; i <= 114; i++) o.push(track("m", i)); } else { for (i = 0; i < clips.length; i++) o.push(track("c", clips[i].n)); } return o; }
   function loadClips() {
@@ -620,7 +707,7 @@ input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(t
 
   var audio = new Audio(); audio.preload = "none";
   var col = "m", cur = 1, view = "m", now = null;
-  var modes = ["next", "one", "stop"], modeLabels = { next: "Play in order", one: "Repeat", stop: "Stop after this" }, mode = "next";
+  var mode = "next", shuffle = false;
   var favs = [], onlyFav = false, onlyOff = false;
   try { favs = (JSON.parse(localStorage.getItem("kaseb:favs") || "[]") || []).map(function (x) { return typeof x === "number" ? "m" + x : String(x); }); } catch (e) { favs = []; }
   try {
@@ -630,7 +717,7 @@ input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(t
   } catch (e) {}
 
   var ICON_PLAY = "M7 4.5v15l13-7.5z", ICON_PAUSE = "M6 4.5h4v15H6zM14 4.5h4v15h-4z";
-  function setPlayIcon(p) { $("playIcon").innerHTML = '<path d="' + (p ? ICON_PAUSE : ICON_PLAY) + '"/>'; $("play").setAttribute("aria-label", p ? "Pause" : "Play"); markRows(); }
+  function setPlayIcon(p) { $("playIcon").innerHTML = '<path d="' + (p ? ICON_PAUSE : ICON_PLAY) + '"/>'; $("play").setAttribute("aria-label", p ? T("pause") : T("play")); $("disc").classList.toggle("playing", !!p); markRows(); }
   function showMsg(html) { var m = $("msg"); if (html) { m.innerHTML = html; m.hidden = false; } else { m.hidden = true; } }
 
   function select(c, k, autoplay) {
@@ -638,7 +725,7 @@ input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(t
     if (!t) { c = "m"; k = 1; t = track("m", 1); }
     col = c; cur = k; now = t;
     $("kind").textContent = t.kind; $("name").textContent = t.title; $("name").classList.toggle("long", t.title.length > 14);
-    $("sub").textContent = t.sub; $("no").textContent = t.info;
+    $("sub").textContent = t.sub; $("no").textContent = t.info; $("ttl").textContent = t.ttl;
     $("seek").value = 0; $("seek").style.setProperty("--p", "0%");
     $("cur").textContent = fmt(0); $("dur").textContent = fmt(0);
     showMsg("");
@@ -646,7 +733,7 @@ input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(t
     setSrc(t, autoplay);
     try { localStorage.setItem("kaseb:last3", c + ":" + k); } catch (e) {}
     if ("mediaSession" in navigator) {
-      try { navigator.mediaSession.metadata = new MediaMetadata({ title: t.title + (t.tr ? " · " + t.tr : ""), artist: "Sheikh Ahmed Kaseb", album: c === "m" ? "Mushaf" : "Recitations" }); } catch (e) {}
+      try { navigator.mediaSession.metadata = new MediaMetadata({ title: t.title + (t.tr ? " · " + t.tr : ""), artist: T("artist"), album: c === "m" ? "Mushaf" : "Recitations" }); } catch (e) {}
     }
     markRows(); paintFav();
   }
@@ -676,12 +763,13 @@ input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(t
   }
   function fail() {
     $("play").classList.remove("busy"); setPlayIcon(false);
-    showMsg('Could not play this recitation. Check your internet connection or <a href="' + now.url + '" target="_blank" rel="noopener">open the audio file directly</a>.');
+    showMsg(T("fail", now.url));
   }
   function step(d) {
     var list = all(col), i = 0;
     for (; i < list.length; i++) if (list[i].key === cur) break;
-    i = (i + d + list.length) % list.length;
+    if (shuffle && d > 0 && list.length > 1) { var r; do { r = Math.floor(Math.random() * list.length); } while (r === i); i = r; }
+    else i = (i + d + list.length) % list.length;
     select(col, list[i].key, true);
   }
 
@@ -702,8 +790,7 @@ input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(t
   });
   audio.addEventListener("ended", function () {
     if (mode === "one") { audio.currentTime = 0; go(); }
-    else if (mode === "next") { step(1); }
-    else { setPlayIcon(false); }
+    else { step(1); }
   });
 
   var seeking = false;
@@ -712,10 +799,22 @@ input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(t
   $("play").addEventListener("click", function () { if (audio.paused) go(); else audio.pause(); });
   $("prev").addEventListener("click", function () { step(-1); });
   $("next").addEventListener("click", function () { step(1); });
-  $("mode").addEventListener("click", function () { mode = modes[(modes.indexOf(mode) + 1) % modes.length]; this.textContent = modeLabels[mode]; });
+  $("mode").addEventListener("click", function () { mode = mode === "one" ? "next" : "one"; this.setAttribute("aria-pressed", mode === "one" ? "true" : "false"); toast(T(mode === "one" ? "tRepeatOn" : "tRepeatOff")); });
+  $("shuf").addEventListener("click", function () { shuffle = !shuffle; this.setAttribute("aria-pressed", shuffle ? "true" : "false"); toast(T(shuffle ? "tShufOn" : "tShufOff")); });
+  $("topDl").addEventListener("click", function () {
+    if (!now) return;
+    if (isOff(now)) { toast(T("tIsOff")); return; }
+    if (idOf(now) in dls) return;
+    toast(T("tDl")); download(now);
+  });
+  function paintTop() { var b = $("topDl"); if (b && now) { var on = isOff(now); b.classList.toggle("on", on); } }
+  $("langBtn").addEventListener("click", function () {
+    LANG = LANG === "ar" ? "en" : "ar"; try { localStorage.setItem("kaseb:lang", LANG); } catch (e) {}
+    applyLang(); paintTabs(); buildList($("q").value); if (now) select(col, cur, false);
+  });
   function fk(c, k) { return (c === "c" ? "k" : "m") + k; }
   function isFav(id) { return favs.indexOf(id) !== -1; }
-  function paintFav() { var b = $("fav"), f = isFav(fk(col, cur)); b.textContent = f ? "♥ Saved" : "♡ Save"; b.setAttribute("aria-pressed", f ? "true" : "false"); }
+  function paintFav() { var b = $("fav"), f = isFav(fk(col, cur)); b.classList.toggle("on", f); b.setAttribute("aria-pressed", f ? "true" : "false"); paintTop(); }
   $("fav").addEventListener("click", function () {
     var id = fk(col, cur), i = favs.indexOf(id);
     if (i === -1) favs.push(id); else favs.splice(i, 1);
@@ -724,7 +823,7 @@ input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(t
   });
   function paintTabs() {
     $("tabM").classList.toggle("act", view === "m"); $("tabC").classList.toggle("act", view === "c");
-    $("tabC").textContent = "Recitations · " + ar(clips.length);
+    $("tabC").textContent = T("recs") + " · " + ar(clips.length);
     $("tabAll").classList.toggle("act", !onlyFav && !onlyOff); $("tabFav").classList.toggle("act", onlyFav); $("tabOff").classList.toggle("act", onlyOff);
   }
   function setView(v) { view = v; paintTabs(); if (v === "c") loadClips(); buildList($("q").value); }
@@ -744,7 +843,7 @@ input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(t
   }
   function nmsMeta() {
     if (!NMS || !now) return;
-    nms("setMetadata", { title: now.title, artist: "Sheikh Ahmed Kaseb", album: now.col === "m" ? "Mushaf" : "Recitations" });
+    nms("setMetadata", { title: now.title, artist: T("artist"), album: now.col === "m" ? "Mushaf" : "Recitations" });
   }
   var lastPos = 0;
   if (NMS) {
@@ -780,17 +879,18 @@ input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(t
   var OK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   function dlHtml(t) {
     var id = idOf(t), a = ' data-c="' + t.col + '" data-n="' + t.key + '" data-id="' + id + '"';
-    if (bundled[id]) return '<span class="dl on"' + a + ' title="Included in the app" aria-label="Included offline">' + OK + '</span>';
-    if (saved[id]) return '<button class="dl on" type="button" data-act="rm"' + a + ' aria-label="Downloaded. Tap to remove">' + OK + '</button>';
+    if (bundled[id]) return '<span class="dl on"' + a + ' title="' + T("incl") + '" aria-label="' + T("incl") + '">' + OK + '</span>';
+    if (saved[id]) return '<button class="dl on" type="button" data-act="rm"' + a + ' aria-label="' + T("dled") + '">' + OK + '</button>';
     if (id in dls) return '<span class="dl pct"' + a + '>' + (dls[id] >= 0 ? dls[id] + "%" : "…") + '</span>';
-    return '<button class="dl" type="button" data-act="dl"' + a + ' aria-label="Download for offline">' + DL + '</button>';
+    return '<button class="dl" type="button" data-act="dl"' + a + ' aria-label="' + T("dlAria") + '">' + DL + '</button>';
   }
   function paintDl(id) {
+    paintTop();
     var el = listEl.querySelector('.dl[data-id="' + id + '"]'); if (!el) return;
     var t = track(el.getAttribute("data-c"), +el.getAttribute("data-n")); if (!t) return;
     el.outerHTML = dlHtml(t);
   }
-  function dlNote(m) { var d = $("dlmsg"); if (m) { d.textContent = m; d.hidden = false; } else { d.hidden = true; } }
+  function dlNote(m) { var d = $("dlmsg"); if (m) { d.textContent = m; d.hidden = false; toast(m); } else { d.hidden = true; } }
   function downloadNative(t) {
     var id = idOf(t); if (id in dls) return;
     dls[id] = 0; paintDl(id); dlNote("");
@@ -804,12 +904,12 @@ input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(t
       });
     } catch (e) {}
     FS.downloadFile({ url: t.url, path: fsPath(id), directory: "DATA", recursive: true, progress: true }).then(function () {
-      saved[id] = 1; delete dls[id]; cleanup(); paintDl(id);
+      saved[id] = 1; delete dls[id]; cleanup(); paintDl(id); toast(T("tDone"));
       if (onlyOff) buildList($("q").value);
     }).catch(function (err) {
       delete dls[id]; cleanup(); paintDl(id);
       try { FS.deleteFile({ path: fsPath(id), directory: "DATA" }).catch(function () {}); } catch (e) {}
-      dlNote("Download failed" + (err && err.message ? " (" + err.message + ")" : "") + ". Check your internet connection and try again.");
+      dlNote(T("dlFail"));
     });
   }
   function download(t) {
@@ -833,16 +933,16 @@ input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(t
     }).then(function (b) {
       return dbReq("readwrite", function (st) { return st.put(b, id); });
     }).then(function () {
-      saved[id] = 1; delete dls[id]; paintDl(id);
+      saved[id] = 1; delete dls[id]; paintDl(id); toast(T("tDone"));
       if (onlyOff) buildList($("q").value);
     }).catch(function () {
       delete dls[id]; paintDl(id);
-      dlNote("Download failed. Check your connection and try again. (Downloads work in the installed app or the downloaded HTML file, not inside the preview.)");
+      dlNote(T("dlFailWeb"));
     });
   }
   function removeDl(t) {
     var id = idOf(t);
-    if (window.confirm && !window.confirm("Remove this download from your device?")) return;
+    if (window.confirm && !window.confirm(T("confirmRm"))) return;
     if (FS) {
       FS.deleteFile({ path: fsPath(id), directory: "DATA" }).catch(function () {}).then(function () {
         delete saved[id]; paintDl(id); if (onlyOff) buildList($("q").value);
@@ -872,8 +972,8 @@ input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(t
       html += '<li class="item"><button class="row" type="button" data-c="' + t.col + '" data-n="' + t.key + '"><span class="no">' + t.key + '</span><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span><span class="nm' + (t.col === "c" ? " sm" : "") + '"><span class="ar" dir="rtl" lang="ar">' + esc(t.title) + '</span>' + (t.tr ? "<small>" + t.tr + "</small>" : "") + '</span></button>' +
         dlHtml(t) + '</li>';
     });
-    if (view === "c" && clipsState === "loading") note = "Loading the full list from the archive…";
-    listEl.innerHTML = (note ? '<li class="empty note">' + note + "</li>" : "") + (count ? html : '<li class="empty">' + (onlyOff && !f ? "Nothing available offline here yet. Tap the download arrow on any item." : onlyFav && !f ? "Nothing saved here yet. Tap Save while listening." : "No results") + "</li>");
+    if (view === "c" && clipsState === "loading") note = T("loading");
+    listEl.innerHTML = (note ? '<li class="empty note">' + note + "</li>" : "") + (count ? html : '<li class="empty">' + (onlyOff && !f ? T("noOff") : onlyFav && !f ? T("noFav") : T("noRes")) + "</li>");
     markRows();
   }
   function markRows() {
@@ -901,7 +1001,7 @@ input[type=range]::-webkit-slider-runnable-track { background: linear-gradient(t
   $("closeList").addEventListener("click", closeSheet);
   document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("sheet").hidden) closeSheet(); });
 
-  paintTabs(); buildList("");
+  applyLang(); paintTabs(); buildList("");
   select(col, cur, false);
   probeBundled();
   setPlayIcon(false);

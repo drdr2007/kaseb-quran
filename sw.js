@@ -1,4 +1,4 @@
-const V = "kaseb-v1", SHELL = V + "-shell", AUDIO = "kaseb-audio";
+const V = "kaseb-v2", SHELL = V + "-shell", AUDIO = "kaseb-audio";
 const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", (e) => {
@@ -48,5 +48,11 @@ self.addEventListener("fetch", (e) => {
     return;
   }
   if (url.origin !== location.origin) return;
+  const page = req.mode === "navigate" || url.pathname.endsWith("/index.html") || url.pathname.endsWith("/");
+  if (page) {
+    // Pages: try the network first so updates show up, fall back to the saved copy when offline.
+    e.respondWith(fetch(req).then((r) => { if (r.ok) { const c = r.clone(); caches.open(SHELL).then((ca) => ca.put("./index.html", c)); } return r; }).catch(() => caches.match("./index.html")));
+    return;
+  }
   e.respondWith(caches.match(req, { ignoreSearch: true }).then((hit) => hit || fetch(req).catch(() => caches.match("./index.html"))));
 });
